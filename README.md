@@ -13,3 +13,4 @@ This is a sample and simple project to learn about spring boot REStApi Creation 
    **
 4. Update the MYSQL Password in your local
 5. Open "Product_REStServiceGuide.pdf" for referenece
+6. TECH Stack Used in this Project (Java Spring Boot, My SQL)
