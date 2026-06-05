@@ -11,4 +11,5 @@ This is a sample and simple project to learn about spring boot REStApi Creation 
    
    Select * from Product
    **
-4. Open "Product_REStServiceGuide.pdf" for referenece
+4. Update the MYSQL Password in your local
+5. Open "Product_REStServiceGuide.pdf" for referenece
