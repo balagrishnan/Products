@@ -2,7 +2,8 @@ This is a sample and simple project to learn about spring boot REStApi Creation 
 
 1. claud prompt and response uploaded as PDF file for future reference
 2. Before Start RUN the Spring Boot Application Execute the below SQL Query in MYSQL
- **  CREATE DATABASE TEST
+ **
+   CREATE DATABASE TEST
    
    USE TEST
    
