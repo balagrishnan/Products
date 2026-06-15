@@ -2,10 +2,10 @@ This is a sample and simple project to learn about spring boot REStApi Creation 
 
 1. claud prompt and response uploaded as PDF file for future reference
 2. Before Start RUN the Spring Boot Application Execute the below SQL Query in MYSQL
- **
-   CREATE DATABASE TEST
+
+   **CREATE DATABASE TEST**
    
-   USE TEST
+   **USE TEST**
    
    Create Table Product( 
 id INT NOT NULL AUTO_INCREMENT, 
@@ -17,8 +17,8 @@ category varchar(100),
 quantity int
 )
    
-   Select * from Product
-   **
+   **Select * from Product**
+
 4. Update the MYSQL Password in your local
 5. Open "Product_REStServiceGuide.pdf" for referenece
 6. TECH Stack Used in this Project (Java Spring Boot, My SQL)
