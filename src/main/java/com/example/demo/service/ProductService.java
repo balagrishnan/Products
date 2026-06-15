@@ -30,6 +30,8 @@ public class ProductService {
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .price(dto.getPrice())
+                .category(dto.getCategory())
+                .quantity(dto.getQuantity())
                 .build();
         return productRepository.save(product);
     }
@@ -39,6 +41,8 @@ public class ProductService {
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
+        product.setCategory(dto.getCategory());
+        product.setQuantity(dto.getQuantity());
         return productRepository.save(product);
     }
 
