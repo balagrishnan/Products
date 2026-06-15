@@ -7,7 +7,15 @@ This is a sample and simple project to learn about spring boot REStApi Creation 
    
    USE TEST
    
-   Create Table Product( id INT NOT NULL AUTO_INCREMENT, name VARCHAR(45) NOT NULL, description VARCHAR (100), PRIMARY KEY(id), price float)
+   Create Table Product( 
+id INT NOT NULL AUTO_INCREMENT, 
+name VARCHAR(45) NOT NULL, 
+description VARCHAR (100), 
+PRIMARY KEY(id), 
+price float, 
+category varchar(100), 
+quantity int
+)
    
    Select * from Product
    **
