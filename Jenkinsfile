@@ -28,13 +28,13 @@ pipeline {
                 script {
                     echo 'Cleaning up any existing containers safely...'
                         try {
-                            bat 'docker stop my-backend-app || ver > nul'
+                            bat 'docker stop product-service-java || ver > nul'
                         } catch (Exception e) {
                             echo 'Container is already stopped.'
                         }
                         
                         try {
-                            bat 'docker rm my-backend-app || ver > nul'
+                            bat 'docker rm product-service-java || ver > nul'
                         } catch (Exception e) {
                             echo 'Container is already removed.'
                         }
@@ -44,7 +44,7 @@ pipeline {
                             bat 'docker build --no-cache -t backend-image .'
                             
                             // CHANGED PORT: Mapping local Windows port 8081 to container port 8080
-                            bat 'docker run -d -p 8081:8080 --name my-backend-app backend-image'
+                            bat 'docker run -d -p 8081:8080 --name product-service-java backend-image'
                             
                             echo 'Docker container successfully deployed on port 8081!'
                         } catch (Exception e) {
