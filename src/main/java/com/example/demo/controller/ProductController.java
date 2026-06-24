@@ -9,11 +9,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
+// Kafka code
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @RestController
 @RequestMapping("/api/products")
 @AllArgsConstructor
 public class ProductController {
+
+    @Autowired
     private final ProductService productService;
+
+    // 1. Inject Spring's KafkaTemplate to handle communication with Docker Kafka
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+    // 2. Inject an ObjectMapper to cleanly convert your Java object into a JSON String
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private static final String TOPIC_NAME = "product_updates";
 
     //GET All Products
     @GetMapping
@@ -29,8 +49,23 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody ProductDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(productService.createProduct(dto));
+        // First, execute your original database/service logic
+        Product savedProduct = productService.createProduct(dto);
+
+        // 3. Asynchronously push a copy of the product data into Kafka!
+        try{
+            // Convert the saved product object into a text JSON String
+            String jsonPayload = objectMapper.writeValueAsString(savedProduct);
+
+            // Send to topic "product_updates" using the product's ID as the message key
+            kafkaTemplate.send(TOPIC_NAME, String.valueOf(savedProduct.getId()), jsonPayload);
+            System.out.println("Event successfully sent to Kafka for Product ID: " + savedProduct.getId());
+
+        } catch (Exception e){
+            // Log the error but don't crash the web request—the database write already succeeded!
+            System.err.println("Failed to publish product event to Kafka: " + e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
     }
 
     @PutMapping("/{id}")
