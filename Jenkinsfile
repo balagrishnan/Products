@@ -44,8 +44,11 @@ pipeline {
                             bat 'docker build --no-cache -t backend-image .'
                             
                             // CHANGED PORT: Mapping local Windows port 8081 to container port 8080
-                            bat 'docker run -d -p 8081:8080 --name product-service-java backend-image'
-                            
+                            // bat 'docker run -d -p 8081:8080 --name product-service-java backend-image'
+
+                            // ADDED: Overriding the bootstrap server at runtime via Environment Variable (-e)
+                            bat 'docker run -d -p 8081:8080 -e SPRING_KAFKA_BOOTSTRAP_SERVERS=host.docker.internal:9092 --name product-service-java backend-image'
+
                             echo 'Docker container successfully deployed on port 8081!'
                         } catch (Exception e) {
                             echo 'Failed to build or run the Docker container.'
