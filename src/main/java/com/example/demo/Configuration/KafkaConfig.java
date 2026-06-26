@@ -47,23 +47,23 @@ public class KafkaConfig {
         return new ObjectMapper();
     }
 
-    @Bean
-    public ConsumerFactory<String, String> consumerFactory(){
-        Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        // Crucial: Use Deserializers (Bytes -> String) instead of Serializers
-        configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, "product_processing_group");
-        configProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        return new DefaultKafkaConsumerFactory<>(configProps);
-    }
-
-    @Bean(name = "kafkaListenerContainerFactory") // <-- Explicitly name it here
-    public ConcurrentKafkaListenerContainerFactory<String, String> concurrentKafkaListenerContainerFactory(){
-        ConcurrentKafkaListenerContainerFactory<String, String> factory =
-                new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
-        return factory;
-    }
+//    @Bean
+//    public ConsumerFactory<String, String> consumerFactory(){
+//        Map<String, Object> configProps = new HashMap<>();
+//        configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+//        // Crucial: Use Deserializers (Bytes -> String) instead of Serializers
+//        configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+//        configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+//        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, "product_processing_group");
+//        configProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+//        return new DefaultKafkaConsumerFactory<>(configProps);
+//    }
+//
+//    @Bean(name = "kafkaListenerContainerFactory") // <-- Explicitly name it here
+//    public ConcurrentKafkaListenerContainerFactory<String, String> concurrentKafkaListenerContainerFactory(){
+//        ConcurrentKafkaListenerContainerFactory<String, String> factory =
+//                new ConcurrentKafkaListenerContainerFactory<>();
+//        factory.setConsumerFactory(consumerFactory());
+//        return factory;
+//    }
 }
