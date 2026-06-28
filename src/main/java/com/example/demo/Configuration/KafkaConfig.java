@@ -29,6 +29,7 @@ public class KafkaConfig {
 
     @Bean
     public ProducerFactory<String, String> producerFactory(){
+        System.out.println("KafkaServer: " + bootstrapServers);
         Map<String, Object> configProps = new HashMap<>();
         // Points directly to your running Docker Kafka container
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
