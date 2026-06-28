@@ -34,7 +34,7 @@ pipeline {
                         }
                         
                         try {
-                            bat 'docker rm product-service-java || ver > nul'
+                            bat 'docker rm -f product-service-java || ver > nul'
                         } catch (Exception e) {
                             echo 'Container is already removed.'
                         }
@@ -47,7 +47,8 @@ pipeline {
                             // bat 'docker run -d -p 8081:8080 --name product-service-java backend-image'
 
                             // ADDED: Overriding the bootstrap server at runtime via Environment Variable (-e)
-                            bat 'docker run -d -p 8081:8080 -e SPRING_KAFKA_BOOTSTRAP_SERVERS=host.docker.internal:9092 --name product-service-java backend-image'
+                            // bat 'docker run -d -p 8081:8080 -e SPRING_KAFKA_BOOTSTRAP_SERVERS=host.docker.internal:9092 --name product-service-java backend-image'
+                            bat 'docker run -d --name product-service-java --network product-network -p 8081:8081 --restart always product-service-java:latest'
 
                             echo 'Docker container successfully deployed on port 8081!'
                         } catch (Exception e) {
