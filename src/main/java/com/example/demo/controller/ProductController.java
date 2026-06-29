@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import com.example.demo.model.Product;
 import com.example.demo.dto.ProductDTO;
 import com.example.demo.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,23 +17,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.example.productapi.service.ProductEventProducer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/products")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProductController {
-
-    @Autowired
     private final ProductService productService;
-
     // 1. Inject Spring's KafkaTemplate to handle communication with Docker Kafka
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
-
+    private final KafkaTemplate<String, String> kafkaTemplate;
     // 2. Inject an ObjectMapper to cleanly convert your Java object into a JSON String
-    @Autowired
-    private ObjectMapper objectMapper;
-
+    private final ObjectMapper objectMapper;
     private static final String TOPIC_NAME = "product_updates";
 
     //GET All Products
@@ -91,5 +89,15 @@ public class ProductController {
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // FIXED ENDPOINT: Triggers the price topic correctly using the service instance
+    @PutMapping("/{id}/price")
+    public ResponseEntity<String> updateProductPrice(@PathVariable Long id, @RequestBody String priceJson) {
+
+        // FIXED: Changed from 'ProductService' (Static) to 'productService' (Instance variable)
+        productService.sendPriceUpdateEvent(id, priceJson);
+
+        return ResponseEntity.ok("Product price updated and event streamed successfully!");
     }
 }
