@@ -70,7 +70,21 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody ProductDTO dto) {
-        return ResponseEntity.ok(productService.updateProductById(id, dto));
+        // return ResponseEntity.ok(productService.updateProductById(id, dto));
+
+        Product updatedProduct = productService.updateProductById(id, dto);
+
+        try {
+
+            String jsonPayload = objectMapper.writeValueAsString(updatedProduct);
+            kafkaTemplate.send(TOPIC_NAME, String.valueOf(id), jsonPayload);
+            System.out.println("Event successfully sent to Kafka for Product Id:" + id);
+
+        } catch (Exception e) {
+            System.err.println("Failed to publish product event to Kafka" + e.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(updatedProduct);
     }
 
     @DeleteMapping("/{id}")
